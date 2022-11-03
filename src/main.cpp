@@ -286,22 +286,22 @@ int Menu(){
                 SetConsoleTitle("Help Menu");
                 system("CLS");
                 std::cout << "README!\n"
-                             "\t1)This program generates grid of 15x15 points\n"
-                             "\t2)height value is point on grid that the mountain generation bases on\n"
-                             "\t3)Height devider is a number that changes how diffrent are height values to the top\n"
-                             "\n"
-                             "Help:\n"
-                             "\t1)To change any value, first type it than press enter\n"
-                             "\t2)Set X and Z coordinets to intiger beetwen 0 and 14 to specify\n"
-                             "\t  point on the grid\n"
-                             "\t3)Set Y coordinates to any number beedtween -50 and 50\n"
-                             "\t  BUT you will probably only need to use numbers from -10 to 10\n"
-                             "\t4)Movment: WSAD and Ctrl to go DOWN and Space to go UP\n"
-                             "About:\n"
-                             "\tAuthor: Olaf Lewandowski\n"
-                             "\tCode is open source feel free to copy it and use in your own projects <3\n"
-                             "\n"
-                             "Type '0' to quit\n";
+                                                                               "\t1)This program generates grid of 15x15 points\n"
+                                                                               "\t2)height value is point on grid that the mountain generation bases on\n"
+                                                                               "\t3)Height devider is a number that changes how diffrent are height values to the top\n"
+                                                                               "\n"
+                                                                               "Help:\n"
+                                                                               "\t1)To change any value, first type it than press enter\n"
+                                                                               "\t2)Set X and Z coordinets to intiger beetwen 0 and 14 to specify\n"
+                                                                               "\t  point on the grid\n"
+                                                                               "\t3)Set Y coordinates to any number beedtween -50 and 50\n"
+                                                                               "\t  BUT you will probably only need to use numbers from -10 to 10\n"
+                                                                               "\t4)Movment: WSAD and Ctrl to go DOWN and Space to go UP\n"
+                                                                               "About:\n"
+                                                                               "\tAuthor: Olaf Lewandowski\n"
+                                                                               "\tCode is open source feel free to copy it and use in your own projects <3\n"
+                                                                               "\n"
+                                                                               "Type '0' to quit\n";
                 while (isInHelpMenu) {
                     int done;
                     done = getch();
@@ -371,63 +371,108 @@ void setCoordinates(int heightDevider = 2){
         vertices[(i*11)+4] = c[2];
         vertices[(i*11)+5] = c[0];
     }
-
+    bool border;
     //set indicies
-    for (int i{}, j{}; i < 2 * 14 * 14 * 3 + + 13 * 2 * 3; i+=3) {
-        if (i % 2 == 0){
+    for (int i{}, j{}, k {}; i < 2 * 14 * 14 * 3 + 13 * 2 * 3; i+=3, k++) {
+        if (i % 2 == 0) {
             indices[i] = j;
-            indices[i+1] = j + 1;
-            indices[i+2] = j + 15;//i + size of one column
+            indices[i + 1] = j + 1;
+            indices[i + 2] = j + 15;//i + size of one column
             j++;
             //calculate normal
 
-            float b[3] = {vertices[(j*11)],vertices[(j*11)+1],vertices[(j*11)+2]};
-            float r[3] = {vertices[((j+1)*11)],vertices[((j+1)*11)+1],vertices[((j+1)*11)+2]};
-            float s[3] = {vertices[((j+15)*11)],vertices[((j+15)*11)+1],vertices[((j+15)*11)+2]};
+            float b[3] = {vertices[(j * 11)], vertices[(j * 11) + 1], vertices[(j * 11) + 2]};
+            float r[3] = {vertices[((j + 1) * 11)], vertices[((j + 1) * 11) + 1], vertices[((j + 1) * 11) + 2]};
+            float s[3] = {vertices[((j + 15) * 11)], vertices[((j + 15) * 11) + 1], vertices[((j + 15) * 11) + 2]};
 
-            float QR[3] = {r[0]-b[0], r[1]-b[1], r[2]-b[2]};
-            float QS[3] = {s[0]-b[0], s[1]-b[1], s[2]-b[2]};
+            float QR[3] = {r[0] - b[0], r[1] - b[1], r[2] - b[2]};
+            float QS[3] = {s[0] - b[0], s[1] - b[1], s[2] - b[2]};
 
-            float normal[3] = {(QR[0]*QS[0])/2, (QR[1]*QS[1])/2, (QR[2]*QS[2])/2};
+            float normal[3] = {(QR[0] * QS[0]) / 2, (QR[1] * QS[1]) / 2, (QR[2] * QS[2]) / 2};
 
-            vertices[(j*11)+7] = normal[0];
-            vertices[(j*11)+8] = normal[1];
-            vertices[(j*11)+9] = normal[2];
+            vertices[(j * 11) + 7] = normal[0];
+            vertices[(j * 11) + 8] = normal[1];
+            vertices[(j * 11) + 9] = normal[2];
 
-            vertices[((j+1)*11)+7] = normal[0];
-            vertices[((j+1)*11)+8] = normal[1];
-            vertices[((j+1)*11)+9] = normal[2];
+            vertices[((j + 1) * 11) + 7] = normal[0];
+            vertices[((j + 1) * 11) + 8] = normal[1];
+            vertices[((j + 1) * 11) + 9] = normal[2];
 
-            vertices[((j+15)*11)+7]= normal[0];
-            vertices[((j+15)*11)+8]= normal[1];
-            vertices[((j+15)*11)+9] = normal[2];
-        } else{
+            vertices[((j + 15) * 11) + 7] = normal[0];
+            vertices[((j + 15) * 11) + 8] = normal[1];
+            vertices[((j + 15) * 11) + 9] = normal[2];
+        } else {
             indices[i] = j;
-            indices[i+1] = j + 15 - 1;
-            indices[i+2] = j + 15;
+            indices[i + 1] = j + 15 - 1;
+            indices[i + 2] = j + 15;
 
             //calculate normal
 
-            float b[3] = {vertices[(j*11)],vertices[(j*11)+1],vertices[(j*11)+2]};
-            float r[3] = {vertices[((j+15-1)*11)],vertices[((j+15-1)*11)+1],vertices[((j+15-1)*11)+2]};
-            float s[3] = {vertices[((j+15)*11)],vertices[((j+15)*11)+1],vertices[((j+15)*11)+2]};
+            float b[3] = {vertices[(j * 11)], vertices[(j * 11) + 1], vertices[(j * 11) + 2]};
+            float r[3] = {vertices[((j + 15 - 1) * 11)], vertices[((j + 15 - 1) * 11) + 1],
+                          vertices[((j + 15 - 1) * 11) + 2]};
+            float s[3] = {vertices[((j + 15) * 11)], vertices[((j + 15) * 11) + 1], vertices[((j + 15) * 11) + 2]};
 
-            float QR[3] = {r[0]-b[0], r[1]-b[1], r[2]-b[2]};
-            float QS[3] = {s[0]-b[0], s[1]-b[1], s[2]-b[2]};
+            float QR[3] = {r[0] - b[0], r[1] - b[1], r[2] - b[2]};
+            float QS[3] = {s[0] - b[0], s[1] - b[1], s[2] - b[2]};
 
-            float normal[3] = {QR[0]*QS[0], QR[1]*QS[1], QR[2]*QS[2]};
+            float normal[3] = {QR[0] * QS[0], QR[1] * QS[1], QR[2] * QS[2]};
 
-            vertices[(j*11)+7] = normal[0];
-            vertices[(j*11)+8] = normal[1];
-            vertices[(j*11)+9] = normal[2];
+            vertices[(j * 11) + 7] = normal[0];
+            vertices[(j * 11) + 8] = normal[1];
+            vertices[(j * 11) + 9] = normal[2];
 
-            vertices[((j+15-1)*11)+7] = normal[0];
-            vertices[((j+15-1)*11)+8] = normal[1];
-            vertices[((j+15-1)*11)+9] = normal[2];
+            vertices[((j + 15 - 1) * 11) + 7] = normal[0];
+            vertices[((j + 15 - 1) * 11) + 8] = normal[1];
+            vertices[((j + 15 - 1) * 11) + 9] = normal[2];
 
-            vertices[((j+15)*11)+7] = normal[0];
-            vertices[((j+15)*11)+8] = normal[1];
-            vertices[((j+15)*11)+9] = normal[2];
+            vertices[((j + 15) * 11) + 7] = normal[0];
+            vertices[((j + 15) * 11) + 8] = normal[1];
+            vertices[((j + 15) * 11) + 9] = normal[2];
+        }
+    }
+
+    for (int i = 29 * 3; i < 1250; i+=15*3) {
+        bool isIn = false;
+
+        int arr[14];
+        for (int j = 44, l{}; l < 15; j+=30, l++) {
+            arr[l] = j;
+        }
+
+        for (auto x:arr) {
+            if (i / 3 == x){
+                isIn = true;
+                break;
+            }
+        }
+
+        if (!isIn){
+            indices[i] = indices[i];
+            indices[i + 1] = indices[i];
+            indices[i + 2] = indices[i];
+        }
+    }
+
+    for (int i = 28 * 3; i < 1250; i+=15*3) {
+        bool isIn = false;
+
+        int arr[14];
+        for (int j = 43, l{}; l < 15; j+=30, l++) {
+            arr[l] = j;
+        }
+
+        for (auto x:arr) {
+            if (i / 3 == x){
+                isIn = true;
+                break;
+            }
+        }
+
+        if (!isIn){
+            indices[i] = indices[i];
+            indices[i + 1] = indices[i];
+            indices[i + 2] = indices[i];
         }
     }
 }
@@ -534,7 +579,8 @@ void runProgram(){
 //        std::cout << x << "\t";
 //    }
 //    for (auto x:indices) {
-//        std::cout << int(x) << "\t";
+//
+//            std::cout << int(x) << "\t";
 //    }
 
     // Main while loop
