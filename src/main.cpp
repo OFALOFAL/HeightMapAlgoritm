@@ -206,10 +206,12 @@ int Menu(){
                             system("CLS");
 
                             std::cout << "High values:\n";
+                            std::cout << "X Z Y\n";
                             for (auto x:yNum.gethVals()) {
                                 for (auto v:x) {
-                                    std::cout << v << "\n";
+                                    std::cout << v << " ";
                                 }
+                                std::cout << "\n";
                             }
 
                             float coords[3];
