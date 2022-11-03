@@ -295,6 +295,7 @@ int Menu(){
                              "\t2)Set X and Z coordinets to intiger beetwen 0 and 14 to specify point on the grid\n"
                              "\t3)Set Y coordinates to any number beedtween -50 and 50\n"
                              "\t  BUT you will probably only need to use numbers from -10 to 10\n"
+                             "\t4)Movment: WSAD and Ctrl to go DOWN and Space to go UP\n"
                              "About:\n"
                              "\tAuthor: Olaf Lewandowski\n"
                              "\tCode is open source feel free to copy it and use in your own projects <3\n"
