@@ -18,5 +18,5 @@ add_executable(HeightMapAlgorithm libraries/glad/src/glad.c src/main.cpp src/c_S
 include_directories(libraries/glad/include)
 include_directories(libraries/glm/)
 
-target_link_libraries(HeightMapAlgorithm glfw)
+target_link_libraries(HeightMapAlgorithm libraries/glfw)
 target_link_libraries(HeightMapAlgorithm OpenGL::GL)
