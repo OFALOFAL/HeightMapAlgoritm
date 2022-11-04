@@ -72,8 +72,9 @@ void exit(){
 }
 
 //set hVal
-int Menu(){
+std::string Menu(){
     int heightDevider = 1;
+    int showPointsInfo = 0;
     bool isInMenu = true;
     HWND consoleWindowHandle = GetConsoleWindow();
     while (isInMenu){
@@ -286,22 +287,23 @@ int Menu(){
                 SetConsoleTitle("Help Menu");
                 system("CLS");
                 std::cout << "README!\n"
-                                                                               "\t1)This program generates grid of 15x15 points\n"
-                                                                               "\t2)height value is point on grid that the mountain generation bases on\n"
-                                                                               "\t3)Height devider is a number that changes how diffrent are height values to the top\n"
-                                                                               "\n"
-                                                                               "Help:\n"
-                                                                               "\t1)To change any value, first type it than press enter\n"
-                                                                               "\t2)Set X and Z coordinets to intiger beetwen 0 and 14 to specify\n"
-                                                                               "\t  point on the grid\n"
-                                                                               "\t3)Set Y coordinates to any number beedtween -50 and 50\n"
-                                                                               "\t  BUT you will probably only need to use numbers from -10 to 10\n"
-                                                                               "\t4)Movment: WSAD and Ctrl to go DOWN and Space to go UP\n"
-                                                                               "About:\n"
-                                                                               "\tAuthor: Olaf Lewandowski\n"
-                                                                               "\tCode is open source feel free to copy it and use in your own projects <3\n"
-                                                                               "\n"
-                                                                               "Type '0' to quit\n";
+                           "\t1)This program generates grid of 15x15 points\n"
+                           "\t2)height value is point on grid that the mountain generation bases on\n"
+                           "\t3)Height devider is a number that changes how diffrent are height\n"
+			   "\t  values to the bottom\n"
+                           "\n"
+                           "Help:\n"
+                           "\t1)To change any value, first type it than press enter\n"
+                           "\t2)Set X and Z coordinets to intiger beetwen 0 and 14 to specify\n"
+                           "\t  point on the grid\n"
+                           "\t3)Set Y coordinates to any number beedtween -50 and 50\n"
+                           "\t  BUT you will probably only need to use numbers from -10 to 10\n"
+                           "\t4)Movment: WSAD and Ctrl to go DOWN and Space to go UP\n"
+                           "About:\n"
+                           "\tAuthor: Olaf Lewandowski\n"
+                           "\tCode is open source feel free to copy it and use in your own projects <3\n"
+                           "\n"
+                           "Type '0' to quit\n";
                 while (isInHelpMenu) {
                     int done;
                     done = getch();
@@ -317,17 +319,21 @@ int Menu(){
                 while (notSure) {
                     system("CLS");
                     SetConsoleTitle("Render Menu");
-                    std::cout << "Note: Press ESC key to quit render window\nRender?\n(Type)\nY/N\n";
+                    std::cout << "Note: Press ESC key to quit render window\n\nDo you want to show points menuInfo\n(Type)\nY/N\n";
                     int sure;
                     sure = getch();
                     if (toupper(int(sure)) == int('Y')) {
                         system("CLS");
                         std::cout << "Wait....";
+                        showPointsInfo = 1;
                         isInMenu = false;
                         notSure = false;
                     } else if (toupper(int(sure)) == int('N')) {
+                        system("CLS");
+                        std::cout << "Wait....";
+                        showPointsInfo = 0;
+                        isInMenu = false;
                         notSure = false;
-                        break;
                     }
                 }
                 break;
@@ -338,10 +344,16 @@ int Menu(){
                 std::exit(0);
         }
     }
-    return heightDevider;
+
+    //concatinate info to one string
+    std::stringstream ss;
+    ss << heightDevider << showPointsInfo;
+    std::string menuInfo = ss.str();
+
+    return menuInfo;
 }
 
-void setCoordinates(int heightDevider = 2){
+void setCoordinates(int heightDevider = 1){
     yAxis = yNum.yAxisGet(heightDevider);
 
     for (int i = 1, j {}; j < yAxis.size(); i += 11, j++) {
@@ -432,36 +444,22 @@ void setCoordinates(int heightDevider = 2){
         }
     }
 
-    for (int i = 29 * 3; i < 1250; i+=15*3) {
+
+    // hide all "floor" indices (points where indice goes from back to front of the grid making floor lol)
+    //first point starts at 28 iteration so i find 28th indicy (indicy has 3 points so 28 * 3)
+    //next points are in 15 spaces beteen so i add 15*3 to i
+    //size to iterate is 14 * 15 * 2 * 3  : 14 times 28 (14 * 2) indices of size 310
+    for (int i = 28 * 3; i < 14 * 14 * 2 * 3; i+=15*3) {
+
+        //bool to check if value is on list of indices to hide
         bool isIn = false;
 
-        int arr[14];
-        for (int j = 44, l{}; l < 15; j+=30, l++) {
-            arr[l] = j;
-        }
-
-        for (auto x:arr) {
-            if (i / 3 == x){
-                isIn = true;
-                break;
-            }
-        }
-
-        if (!isIn){
-            indices[i] = indices[i];
-            indices[i + 1] = indices[i];
-            indices[i + 2] = indices[i];
-        }
-    }
-
-    for (int i = 28 * 3; i < 1250; i+=15*3) {
-        bool isIn = false;
-
+        //set hide-indices-list
         int arr[14];
         for (int j = 43, l{}; l < 15; j+=30, l++) {
-            arr[l] = j;
+            arr3[l] = j;
         }
-
+        //get i in arr
         for (auto x:arr) {
             if (i / 3 == x){
                 isIn = true;
@@ -469,15 +467,21 @@ void setCoordinates(int heightDevider = 2){
             }
         }
 
+        //set floor indicies to self[0] to hide them
         if (!isIn){
+	    //indicy 1
             indices[i] = indices[i];
             indices[i + 1] = indices[i];
             indices[i + 2] = indices[i];
+	    //indicy 2
+	    indices[i + 3] = indices[i];
+            indices[i + 4] = indices[i];
+            indices[i + 5] = indices[i];
         }
     }
 }
 
-void runProgram(){
+void runProgram(int menuInfo_showPInfo){
     // Initialize GLFW
     glfwInit();
 
@@ -547,21 +551,23 @@ void runProgram(){
     lightVBO.Unbind();
     lightEBO.Unbind();
 
+    //set light model
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     glm::vec3 lightPos = glm::vec3(3.0f, 4.0f, 3.0f);
     glm::mat4 lightModel = glm::mat4(1.0f);
     lightModel = glm::translate(lightModel, lightPos);
 
-    glm::vec3 pyramidPos = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::mat4 pyramidModel = glm::mat4(1.0f);
-    pyramidModel = glm::translate(pyramidModel, pyramidPos);
+    //set terrain model
+    glm::vec3 terrainPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::mat4 terrainModel = glm::mat4(1.0f);
+    terrainModel = glm::translate(terrainModel, terrainPos);
 
 
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     shaderProgram.Activate();
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(terrainModel));
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
@@ -575,19 +581,32 @@ void runProgram(){
     c_Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
     //print vertices and inices
-//    for (auto x:vertices) {
-//        std::cout << x << "\t";
-//    }
-//    for (auto x:indices) {
-//
-//            std::cout << int(x) << "\t";
-//    }
+    if (menuInfo_showPInfo == 1){
+        system("CLS");
+        std::cout << "Vertices:\n"
+                     "******************\n";
+        for (int v{}; v < sizeof(vertices); v++) {
+            if ((v + 1) % 11 == 1)
+                std::cout << v << ": {";
+            std::cout << vertices[v] << ", ";
+            if ((v + 1) % 11 == 0)
+                std::cout << " }\n";
+        }
+        std::cout << "\nIndices:\n"
+                     "******************\n";
+        for (auto x:indices) {
+            std::cout << int(x) << "\t";
+        }
+    }
 
     // Main while loop
     while (!glfwWindowShouldClose(window))
     {
         glfwSetKeyCallback (window, key_callback);
-        ShowWindow(GetConsoleWindow(), SW_HIDE);
+        if (menuInfo_showPInfo == 0)
+            ShowWindow(GetConsoleWindow(), SW_HIDE);
+        else
+            ShowWindow(GetConsoleWindow(), SW_SHOW);
         //glfwSetKeyCallback(window, key_callback);
         // Specify the color of the background
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -628,8 +647,8 @@ void runProgram(){
         glfwPollEvents();
     }
 
-
-
+    //reset console
+    ShowWindow(GetConsoleWindow(), SW_HIDE);
     // Delete all the objects we've created
     VAO1.Delete();
     EBO1.Delete();
@@ -665,8 +684,15 @@ int main()
     SetWindowLong(consoleWindowHandle, GWL_STYLE, GetWindowLong(consoleWindowHandle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
 
     while (true){
-        int heightDevider = Menu();
-        setCoordinates(heightDevider);
-        runProgram();
+        std::string menuInfo = Menu();
+        std::reverse(menuInfo.begin(), menuInfo.end());
+        char showPInfo = {menuInfo[0]};
+
+        std::reverse(menuInfo.begin(), menuInfo.end());
+        menuInfo.pop_back();
+        std::string heightDevider = menuInfo;
+
+        setCoordinates(std::stoi(heightDevider));
+        runProgram((int)showPInfo - (int)'0');
     }
 }
