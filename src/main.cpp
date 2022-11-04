@@ -71,6 +71,12 @@ void exit(){
     Sleep(200);
 }
 
+void ERRexit(){
+    system("CLS");
+    std::cout << "ERROR ACCURED\nExiting....";
+    Sleep(200);
+}
+
 //set hVal
 std::string Menu(){
     int heightDevider = 1;
@@ -287,23 +293,23 @@ std::string Menu(){
                 SetConsoleTitle("Help Menu");
                 system("CLS");
                 std::cout << "README!\n"
-                           "\t1)This program generates grid of 15x15 points\n"
-                           "\t2)height value is point on grid that the mountain generation bases on\n"
-                           "\t3)Height devider is a number that changes how diffrent are height\n"
-			   "\t  values to the bottom\n"
-                           "\n"
-                           "Help:\n"
-                           "\t1)To change any value, first type it than press enter\n"
-                           "\t2)Set X and Z coordinets to intiger beetwen 0 and 14 to specify\n"
-                           "\t  point on the grid\n"
-                           "\t3)Set Y coordinates to any number beedtween -50 and 50\n"
-                           "\t  BUT you will probably only need to use numbers from -10 to 10\n"
-                           "\t4)Movment: WSAD and Ctrl to go DOWN and Space to go UP\n"
-                           "About:\n"
-                           "\tAuthor: Olaf Lewandowski\n"
-                           "\tCode is open source feel free to copy it and use in your own projects <3\n"
-                           "\n"
-                           "Type '0' to quit\n";
+                             "\t1)This program generates grid of 15x15 points\n"
+                             "\t2)height value is point on grid that the mountain generation bases on\n"
+                             "\t3)Height devider is a number that changes how diffrent are height\n"
+                             "\t  values to the bottom\n"
+                             "\n"
+                             "Help:\n"
+                             "\t1)To change any value, first type it than press enter\n"
+                             "\t2)Set X and Z coordinets to intiger beetwen 0 and 14 to specify\n"
+                             "\t  point on the grid\n"
+                             "\t3)Set Y coordinates to any number beedtween -50 and 50\n"
+                             "\t  BUT you will probably only need to use numbers from -10 to 10\n"
+                             "\t4)Movment: WSAD and Ctrl to go DOWN and Space to go UP\n"
+                             "About:\n"
+                             "\tAuthor: Olaf Lewandowski\n"
+                             "\tCode is open source feel free to copy it and use in your own projects <3\n"
+                             "\n"
+                             "Type '0' to quit\n";
                 while (isInHelpMenu) {
                     int done;
                     done = getch();
@@ -448,7 +454,7 @@ void setCoordinates(int heightDevider = 1){
     // hide all "floor" indices (points where indice goes from back to front of the grid making floor lol)
     //first point starts at 28 iteration so i find 28th indicy (indicy has 3 points so 28 * 3)
     //next points are in 15 spaces beteen so i add 15*3 to i
-    //size to iterate is 14 * 15 * 2 * 3  : 14 times 28 (14 * 2) indices of size 310
+    //size to iterate is 14 * 15 * 2 * 3  : 14 times 28 (14 * 2) indices of size 3
     for (int i = 28 * 3; i < 14 * 14 * 2 * 3; i+=15*3) {
 
         //bool to check if value is on list of indices to hide
@@ -457,7 +463,7 @@ void setCoordinates(int heightDevider = 1){
         //set hide-indices-list
         int arr[14];
         for (int j = 43, l{}; l < 15; j+=30, l++) {
-            arr3[l] = j;
+            arr[l] = j;
         }
         //get i in arr
         for (auto x:arr) {
@@ -469,12 +475,12 @@ void setCoordinates(int heightDevider = 1){
 
         //set floor indicies to self[0] to hide them
         if (!isIn){
-	    //indicy 1
+            //indicy 1
             indices[i] = indices[i];
             indices[i + 1] = indices[i];
             indices[i + 2] = indices[i];
-	    //indicy 2
-	    indices[i + 3] = indices[i];
+            //indicy 2
+            indices[i + 3] = indices[i];
             indices[i + 4] = indices[i];
             indices[i + 5] = indices[i];
         }
@@ -501,7 +507,7 @@ void runProgram(int menuInfo_showPInfo){
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         system("CLS");
-        std::atexit(exit);
+        std::atexit(ERRexit);
         std::exit(0);
     }
     // Introduce the window into the current context
