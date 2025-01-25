@@ -1,5 +1,5 @@
 # HeightMapAlgoritm
-Algoritm that generates mountain using glfw.
+Algoritm for generating mountain-like terrains using glfw.
 Light might be a bit odd becouse i used my own calculations for normals which dont work that great.
 
 To start program:
