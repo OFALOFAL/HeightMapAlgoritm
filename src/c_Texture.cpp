@@ -1,4 +1,5 @@
 #include "../header/c_Texture.h"
+#include "stb_image.h"
 
 c_Texture::c_Texture(const std::string &path)
     : ID(0), FilePath(path), LocalBuffer(nullptr), Width(0), Height(0), BPP(0){

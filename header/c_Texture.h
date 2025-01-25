@@ -6,7 +6,7 @@
 #include "iostream"
 #include <experimental/filesystem>
 
-#include "../libraries/stb/stb_image.h"
+//#include "../libraries/stb/stb_image.h"
 
 
 class c_Texture {
